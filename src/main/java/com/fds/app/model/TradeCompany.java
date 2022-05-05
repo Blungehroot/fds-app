@@ -1,8 +1,8 @@
 package com.fds.app.model;
 
-import javax.persistence.Entity;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
+@Document(collection = "trade_company")
 public class TradeCompany {
     private String symbol;
     private String exchange;
