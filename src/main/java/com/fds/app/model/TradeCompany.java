@@ -8,7 +8,6 @@ import java.io.Serializable;
 
 @Document(collection = "trade_company")
 @Data
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class TradeCompany implements Serializable {
     private String symbol;
     private String exchange;
@@ -22,7 +21,7 @@ public class TradeCompany implements Serializable {
     private String iexId;
     private String region;
     private String currency;
-    private boolean isEnabled;
+    private String isEnabled;
     private String figi;
     private String cik;
     private String lei;

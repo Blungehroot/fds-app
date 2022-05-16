@@ -21,4 +21,13 @@ public class TradeCompaniesReceiver {
                 .map(o -> om.convertValue(o, TradeCompany.class))
                 .collect(Collectors.toList());
     }
+
+    public List<TradeCompany> getActiveCompanies() {
+        List<TradeCompany> list = getTradeCompanies()
+                .stream()
+                .filter(c -> c.getIsEnabled().equals("true"))
+                .collect(Collectors.toList());
+
+        return list;
+    }
 }
