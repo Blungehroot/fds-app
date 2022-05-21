@@ -14,7 +14,7 @@ public class TradeCompaniesReceiver {
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper om = new ObjectMapper();
 
-    public List<TradeCompany> getTradeCompanies() {
+    private List<TradeCompany> getTradeCompanies() {
         ResponseEntity<Object[]> response = restTemplate.getForEntity(IEXAPIS_GET_COMPANIES_URL, Object[].class);
 
         return Arrays.stream(response.getBody())
@@ -25,7 +25,7 @@ public class TradeCompaniesReceiver {
     public List<TradeCompany> getActiveCompanies() {
         List<TradeCompany> list = getTradeCompanies()
                 .stream()
-                .filter(c -> c.getIsEnabled().equals("true"))
+                .filter(c -> c.getIsEnabled().equals("true")).limit(100)
                 .collect(Collectors.toList());
 
         return list;
