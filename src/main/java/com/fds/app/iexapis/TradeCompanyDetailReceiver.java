@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
@@ -23,17 +22,16 @@ public class TradeCompanyDetailReceiver {
         return om.convertValue(response.getBody(), TradeCompanyDetails.class);
     }
 
-    //TODO: need modify
-    public List<TradeCompanyDetails> getAllTradeCompaniesDetails(List<TradeCompany> tradeCompanies) throws ExecutionException, InterruptedException {
-        ExecutorService executorService = Executors.newFixedThreadPool(5);
-        List<TradeCompanyDetails> list = new ArrayList<>();
+    public List<TradeCompanyDetails> getAllTradeCompaniesDetails(List<TradeCompany> tradeCompanies) throws InterruptedException {
+        ExecutorService executorService = Executors.newFixedThreadPool(4);
+        List<TradeCompanyDetails> list = new CopyOnWriteArrayList<>();
 
         Callable<List<TradeCompanyDetails>> callable = () -> {
             while (!tradeCompanies.isEmpty()) {
                 tradeCompanies.forEach(c -> {
                     try {
                         tradeCompanies.remove(c);
-                        Thread.sleep(500);
+                        Thread.sleep(800);
                         list.add(getInfo(c.getSymbol()));
                     } catch (InterruptedException e) {
                         e.printStackTrace();
