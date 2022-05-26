@@ -51,20 +51,11 @@ public class TradeCompanyDetailReceiver {
         return list;
     }
 
-    //TODO: returned in 27 sec
-    public List<TradeCompanyDetails> getAllTradeCompaniesDetailss(List<TradeCompany> tradeCompanies) {
-        List<TradeCompanyDetails> list = new ArrayList<>();
-        tradeCompanies.stream().forEach(c -> list.add(getInfo(c.getSymbol())));
-        return list;
-    }
-
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         TradeCompanyDetailReceiver tradeCompanyDetailReceiver = new TradeCompanyDetailReceiver();
         TradeCompaniesReceiver tradeCompaniesReceiver = new TradeCompaniesReceiver();
 
         List<TradeCompanyDetails> list = tradeCompanyDetailReceiver.getAllTradeCompaniesDetails(tradeCompaniesReceiver.getActiveCompanies());
         System.out.println(list.stream().distinct().collect(Collectors.toList()).size());
-
-        //tradeCompanyDetailReceiver.getAllTradeCompaniesDetailss(tradeCompaniesReceiver.getActiveCompanies());
     }
 }
