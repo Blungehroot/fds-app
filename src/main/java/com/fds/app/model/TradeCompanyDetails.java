@@ -1,6 +1,7 @@
 package com.fds.app.model;
 
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
@@ -58,6 +59,7 @@ public class TradeCompanyDetails implements Serializable {
     private double previousClose;
     private int previousVolume;
     private String primaryExchange;
+    @Id
     private String symbol;
     private String volume;
     private double week52High;

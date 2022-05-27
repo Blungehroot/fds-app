@@ -3,6 +3,8 @@ package com.fds.app.iexapis;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fds.app.model.TradeCompany;
 import com.fds.app.model.TradeCompanyDetails;
+import com.fds.app.service.TradeCompanyDetailsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -15,6 +17,9 @@ public class TradeCompanyDetailReceiver {
     private static final String IEXAPIS_GET_COMPANY_DETAIL_URL = "https://sandbox.iexapis.com/stable/stock/%s/quote?token=Tpk_ee567917a6b640bb8602834c9d30e571";
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper om = new ObjectMapper();
+
+    @Autowired
+    private TradeCompanyDetailsService service;
 
     public TradeCompanyDetails getInfo(String companySymbol) {
         String companyUrl = String.format(IEXAPIS_GET_COMPANY_DETAIL_URL, companySymbol);
@@ -49,6 +54,10 @@ public class TradeCompanyDetailReceiver {
         executorService.invokeAll(callableTasks);
         executorService.shutdown();
         return list;
+    }
+
+    public void saveAllTradeCompaniesDetails(List<TradeCompanyDetails> tradeCompanyDetailsList) {
+        service.saveAll(tradeCompanyDetailsList);
     }
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
