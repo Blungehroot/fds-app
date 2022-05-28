@@ -14,7 +14,7 @@ public class FdsAppApplication implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) {
+    public void run(String... args) throws InterruptedException {
 
     }
 }

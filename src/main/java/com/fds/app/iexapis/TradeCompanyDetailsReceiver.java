@@ -3,23 +3,20 @@ package com.fds.app.iexapis;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fds.app.model.TradeCompany;
 import com.fds.app.model.TradeCompanyDetails;
-import com.fds.app.service.TradeCompanyDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.*;
-import java.util.stream.Collectors;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-public class TradeCompanyDetailReceiver {
+public class TradeCompanyDetailsReceiver {
     private static final String IEXAPIS_GET_COMPANY_DETAIL_URL = "https://sandbox.iexapis.com/stable/stock/%s/quote?token=Tpk_ee567917a6b640bb8602834c9d30e571";
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper om = new ObjectMapper();
-
-    @Autowired
-    private TradeCompanyDetailsService service;
 
     public TradeCompanyDetails getInfo(String companySymbol) {
         String companyUrl = String.format(IEXAPIS_GET_COMPANY_DETAIL_URL, companySymbol);
@@ -54,17 +51,5 @@ public class TradeCompanyDetailReceiver {
         executorService.invokeAll(callableTasks);
         executorService.shutdown();
         return list;
-    }
-
-    public void saveAllTradeCompaniesDetails(List<TradeCompanyDetails> tradeCompanyDetailsList) {
-        service.saveAll(tradeCompanyDetailsList);
-    }
-
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
-        TradeCompanyDetailReceiver tradeCompanyDetailReceiver = new TradeCompanyDetailReceiver();
-        TradeCompaniesReceiver tradeCompaniesReceiver = new TradeCompaniesReceiver();
-
-        List<TradeCompanyDetails> list = tradeCompanyDetailReceiver.getAllTradeCompaniesDetails(tradeCompaniesReceiver.getActiveCompanies());
-        System.out.println(list.stream().distinct().collect(Collectors.toList()).size());
     }
 }
