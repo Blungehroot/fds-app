@@ -25,7 +25,7 @@ public class TradeCompaniesReceiver {
     public List<TradeCompany> getActiveCompanies() {
         List<TradeCompany> list = getTradeCompanies()
                 .stream()
-                .filter(c -> c.getIsEnabled().equals("true")).limit(4)
+                .filter(c -> c.getIsEnabled().equals("true")).limit(2000)
                 .collect(Collectors.toList());
 
         return list;
