@@ -4,12 +4,15 @@ import com.fds.app.config.FdsFactoryConfig;
 import com.fds.app.model.TradeCompany;
 import com.fds.app.model.TradeCompanyDetails;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -19,9 +22,10 @@ public class IexapisApiClient {
     private final FdsFactoryConfig fdsFactoryConfig = new FdsFactoryConfig();
 
     private List<TradeCompany> getTradeCompanies() {
-        ResponseEntity<Object[]> response = fdsFactoryConfig.restTemplate().getForEntity(IEXAPIS_GET_COMPANIES_URL, Object[].class);
-
-        return Arrays.stream(response.getBody())
+        return Arrays.stream(fdsFactoryConfig
+                        .restTemplate()
+                        .getForEntity(IEXAPIS_GET_COMPANIES_URL, Object[].class)
+                        .getBody())
                 .map(o -> fdsFactoryConfig.objectMapper().convertValue(o, TradeCompany.class))
                 .collect(Collectors.toList());
     }
@@ -30,7 +34,7 @@ public class IexapisApiClient {
         List<TradeCompany> list = getTradeCompanies()
                 .stream()
                 .filter(c -> c.getIsEnabled().equals("true"))
-                .limit(10)
+                .limit(1000)
                 .collect(Collectors.toList());
 
         return list;
@@ -38,18 +42,13 @@ public class IexapisApiClient {
 
     public TradeCompanyDetails getInfo(String companySymbol) throws ExecutionException, InterruptedException {
         String companyUrl = String.format(IEXAPIS_GET_COMPANY_DETAIL_URL, companySymbol);
-        CompletableFuture<TradeCompanyDetails> future = CompletableFuture.supplyAsync(() -> {
-            ResponseEntity<TradeCompanyDetails> response = fdsFactoryConfig.restTemplate().getForEntity(companyUrl, TradeCompanyDetails.class);
-            return fdsFactoryConfig.objectMapper().convertValue(response.getBody(), TradeCompanyDetails.class);
-        });
-        return future.get();
+        return CompletableFuture.completedFuture(fdsFactoryConfig.restTemplate().getForEntity(companyUrl, TradeCompanyDetails.class).getBody()).get();
     }
 
-    public List<TradeCompanyDetails> getAllTradeCompaniesDetails(List<TradeCompany> tradeCompanies) throws InterruptedException {
-        ExecutorService executorService = Executors.newFixedThreadPool(4);
-        List<TradeCompanyDetails> list = new CopyOnWriteArrayList<>();
+    public Set<TradeCompanyDetails> getAllTradeCompaniesDetails(List<TradeCompany> tradeCompanies) throws InterruptedException {
+        Set<TradeCompanyDetails> list = new CopyOnWriteArraySet<>();
 
-        Callable<List<TradeCompanyDetails>> callable = () -> {
+        Callable<Set<TradeCompanyDetails>> callable = () -> {
             while (!tradeCompanies.isEmpty()) {
                 tradeCompanies.forEach(c -> {
                     try {
@@ -63,13 +62,14 @@ public class IexapisApiClient {
             }
             return list;
         };
-        List<Callable<List<TradeCompanyDetails>>> callableTasks = new ArrayList<>();
+
+        List<Callable<Set<TradeCompanyDetails>>> callableTasks = new ArrayList<>();
         for (int i = 0; i < tradeCompanies.size(); i++) {
             callableTasks.add(callable);
         }
 
-        executorService.invokeAll(callableTasks);
-        executorService.shutdown();
+        fdsFactoryConfig.executorService().invokeAll(callableTasks);
+        fdsFactoryConfig.executorService().shutdown();
         return list;
     }
 
@@ -77,6 +77,6 @@ public class IexapisApiClient {
         IexapisApiClient receiver = new IexapisApiClient();
         List<TradeCompany> list = receiver.getActiveCompanies();
 
-        System.out.println(receiver.getAllTradeCompaniesDetails(list));
+        System.out.println(receiver.getAllTradeCompaniesDetails(list).size());
     }
 }
