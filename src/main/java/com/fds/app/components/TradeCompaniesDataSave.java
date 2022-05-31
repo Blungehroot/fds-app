@@ -18,7 +18,6 @@ public class TradeCompaniesDataSave implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         IexapisApiClient receiver = new IexapisApiClient();
-        TradeCompanyDetailsReceiver detailsReceiver = new TradeCompanyDetailsReceiver();
         //List<TradeCompanyDetails> result = detailsReceiver.getAllTradeCompaniesDetails(receiver.getActiveCompanies());
         //service.saveAll(result);
     }
