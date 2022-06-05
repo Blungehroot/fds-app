@@ -5,14 +5,8 @@ import com.fds.app.model.TradeCompany;
 import com.fds.app.model.TradeCompanyDetails;
 import lombok.RequiredArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.ExecutionException;
+import java.util.*;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -34,7 +28,6 @@ public class IexapisApiClient {
         List<TradeCompany> list = getTradeCompanies()
                 .stream()
                 .filter(c -> c.getIsEnabled().equals("true"))
-                .limit(1000)
                 .collect(Collectors.toList());
 
         return list;
@@ -45,38 +38,34 @@ public class IexapisApiClient {
         return CompletableFuture.completedFuture(fdsFactoryConfig.restTemplate().getForEntity(companyUrl, TradeCompanyDetails.class).getBody()).get();
     }
 
-    public Set<TradeCompanyDetails> getAllTradeCompaniesDetails(List<TradeCompany> tradeCompanies) throws InterruptedException {
+    public Set<TradeCompanyDetails> getAllTradeCompaniesDetails(List<TradeCompany> tradeCompanies) throws InterruptedException, ExecutionException, TimeoutException {
         Set<TradeCompanyDetails> list = new CopyOnWriteArraySet<>();
 
-        Callable<Set<TradeCompanyDetails>> callable = () -> {
-            while (!tradeCompanies.isEmpty()) {
-                tradeCompanies.forEach(c -> {
-                    try {
-                        tradeCompanies.remove(c);
-                        Thread.sleep(800);
-                        list.add(getInfo(c.getSymbol()));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                });
-            }
-            return list;
-        };
+        ExecutorService executorService = Executors.newFixedThreadPool(1000);
+        Queue<TradeCompany> queue = new LinkedList<>(tradeCompanies);
 
-        List<Callable<Set<TradeCompanyDetails>>> callableTasks = new ArrayList<>();
-        for (int i = 0; i < tradeCompanies.size(); i++) {
-            callableTasks.add(callable);
+        while (!queue.isEmpty()) {
+            TradeCompany company = queue.remove();
+            CompletableFuture.runAsync(() -> {
+                try {
+                    list.add(getInfo(company.getSymbol()));
+                } catch (ExecutionException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }, executorService);
         }
 
-        fdsFactoryConfig.executorService().invokeAll(callableTasks);
-        fdsFactoryConfig.executorService().shutdown();
-        return list;
+        executorService.shutdown();
+        executorService.awaitTermination(3, TimeUnit.SECONDS);
+
+        return CompletableFuture.completedFuture(list).get();
     }
 
-    public static void main(String[] args) throws InterruptedException, ExecutionException {
+    public static void main(String[] args) throws InterruptedException, ExecutionException, TimeoutException {
         IexapisApiClient receiver = new IexapisApiClient();
         List<TradeCompany> list = receiver.getActiveCompanies();
 
         System.out.println(receiver.getAllTradeCompaniesDetails(list).size());
+        System.out.println("========================");
     }
 }
