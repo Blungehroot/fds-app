@@ -38,30 +38,37 @@ public class IexapisApiClient {
         return CompletableFuture.completedFuture(fdsFactoryConfig.restTemplate().getForEntity(companyUrl, TradeCompanyDetails.class).getBody()).get();
     }
 
-    public Set<TradeCompanyDetails> getAllTradeCompaniesDetails(List<TradeCompany> tradeCompanies) throws InterruptedException, ExecutionException, TimeoutException {
+    public Set<TradeCompanyDetails> getAllTradeCompaniesDetails(List<TradeCompany> tradeCompanies) {
         Set<TradeCompanyDetails> list = new CopyOnWriteArraySet<>();
 
-        ExecutorService executorService = Executors.newFixedThreadPool(1000);
+        ExecutorService executorService = fdsFactoryConfig.executorService();
         Queue<TradeCompany> queue = new LinkedList<>(tradeCompanies);
 
         while (!queue.isEmpty()) {
             TradeCompany company = queue.remove();
-            CompletableFuture.runAsync(() -> {
+            CompletableFuture.supplyAsync(() -> {
                 try {
                     list.add(getInfo(company.getSymbol()));
                 } catch (ExecutionException | InterruptedException e) {
                     e.printStackTrace();
                 }
+                return list;
             }, executorService);
         }
 
         executorService.shutdown();
-        executorService.awaitTermination(3, TimeUnit.SECONDS);
+        try {
+            if (!executorService.awaitTermination(240, TimeUnit.SECONDS)) {
+                executorService.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            executorService.shutdownNow();
+        }
 
-        return CompletableFuture.completedFuture(list).get();
+        return list;
     }
 
-    public static void main(String[] args) throws InterruptedException, ExecutionException, TimeoutException {
+    public static void main(String[] args) {
         IexapisApiClient receiver = new IexapisApiClient();
         List<TradeCompany> list = receiver.getActiveCompanies();
 

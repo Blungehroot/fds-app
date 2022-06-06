@@ -23,6 +23,6 @@ public class FdsFactoryConfig {
 
     @Bean
     public ExecutorService executorService() {
-        return Executors.newCachedThreadPool();
+        return Executors.newFixedThreadPool(10);
     }
 }
