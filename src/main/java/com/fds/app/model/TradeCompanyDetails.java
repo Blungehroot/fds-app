@@ -9,6 +9,8 @@ import java.io.Serializable;
 @Document(collection = "trade_company")
 @Data
 public class TradeCompanyDetails implements Serializable {
+    @Id
+    private String id;
     private int avgTotalVolume;
     private String calculationPrice;
     private double change;
@@ -59,7 +61,6 @@ public class TradeCompanyDetails implements Serializable {
     private double previousClose;
     private int previousVolume;
     private String primaryExchange;
-    @Id
     private String symbol;
     private String volume;
     private double week52High;
