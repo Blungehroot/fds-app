@@ -67,12 +67,4 @@ public class IexapisApiClient {
 
         return list;
     }
-
-    public static void main(String[] args) {
-        IexapisApiClient receiver = new IexapisApiClient();
-        List<TradeCompany> list = receiver.getActiveCompanies();
-
-        System.out.println(receiver.getAllTradeCompaniesDetails(list).size());
-        System.out.println("========================");
-    }
 }
