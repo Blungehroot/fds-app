@@ -23,4 +23,8 @@ public class TradeCompanyDetailsService {
         List<TradeCompanyDetails> list = new ArrayList<>(tradeCompanyDetails);
         return tradeCompanyDetailsRepository.saveAll(list);
     }
+
+    public List<TradeCompanyDetails> getAll() {
+        return tradeCompanyDetailsRepository.findAll();
+    }
 }
