@@ -28,8 +28,9 @@ public class IexapisShedulerConfig {
     @Scheduled(cron = "0 0/1 * ? * *")
     public void scheduleDataGathers() {
         log.info("Cron job is started");
+        log.info("Top highest values stocks companies: ");
         CompaniesStocks stocks = new CompaniesStocks();
-        System.out.println(stocks.getAllCompaniesStocks(service.getAll()));
+        System.out.println(stocks.getTopHighestValueCompaniesStocks(stocks.getAllCompaniesStocks(service.getAll())));
         log.info("Cron job is finished");
     }
 }
