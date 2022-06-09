@@ -1,9 +1,10 @@
-package com.fds.app.config;
+package com.fds.app.component;
 
 import com.fds.app.dto.TradeCompanyDetailsDto;
 import com.fds.app.model.TradeCompanyDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
+@Component
 public class CompaniesStocks {
 
     public List<TradeCompanyDetailsDto> getAllCompaniesStocks(List<TradeCompanyDetails> details) {

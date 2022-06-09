@@ -1,6 +1,6 @@
 package com.fds.app.job;
 
-import com.fds.app.config.CompaniesStocks;
+import com.fds.app.component.CompaniesStocks;
 import com.fds.app.iexapis.IexapisApiClient;
 import com.fds.app.service.TradeCompanyDetailsService;
 import lombok.RequiredArgsConstructor;
