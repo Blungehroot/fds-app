@@ -6,8 +6,7 @@ import lombok.Data;
 @Data
 public class TradeCompanyDetailsDto {
     private String symbol;
-    private Double change;
-    private Double changePercent;
+    private Double latestPrice;
     private String companyName;
     private String volume;
     private Integer previousVolume;
@@ -15,8 +14,7 @@ public class TradeCompanyDetailsDto {
     public static TradeCompanyDetailsDto fromTradeCompanyDetails(TradeCompanyDetails tradeCompanyDetails) {
         TradeCompanyDetailsDto tradeCompanyDetailsDto = new TradeCompanyDetailsDto();
         tradeCompanyDetailsDto.setSymbol(tradeCompanyDetails.getSymbol());
-        tradeCompanyDetailsDto.setChange(tradeCompanyDetails.getChange());
-        tradeCompanyDetailsDto.setChangePercent(tradeCompanyDetails.getChangePercent());
+        tradeCompanyDetailsDto.setLatestPrice(tradeCompanyDetails.getLatestPrice());
         tradeCompanyDetailsDto.setCompanyName(tradeCompanyDetails.getCompanyName());
         tradeCompanyDetailsDto.setVolume(tradeCompanyDetails.getVolume());
         tradeCompanyDetailsDto.setPreviousVolume(tradeCompanyDetails.getPreviousVolume());

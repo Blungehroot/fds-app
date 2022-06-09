@@ -33,8 +33,9 @@ public class CompaniesStocks {
 
     }
 
-    /*public List<TradeCompanyDetailsDto> getTopGreatestChangePercentCompanies(List<TradeCompanyDetailsDto> companiesList) {
-
-    }*/
+    public List<TradeCompanyDetailsDto> getTopGreatestChangeCompanies(List<TradeCompanyDetailsDto> companiesList) {
+        companiesList.sort((c1, c2) -> c2.getLatestPrice().compareTo(c1.getLatestPrice()));
+        return companiesList.stream().limit(5).collect(Collectors.toList());
+    }
 }
 
