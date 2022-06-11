@@ -17,9 +17,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 public class ShedulerConfig {
 
     @Autowired
-    private TradeCompanyDetailsService service;
+    private final TradeCompanyDetailsService service;
 
-    @Scheduled(cron = "0 */30 * ? * *")
+    @Scheduled(cron = "0 0/1 * ? * *")
     public void scheduleDataGather() {
         log.info("Cron job is started");
         IexapisApiClient receiver = new IexapisApiClient();
@@ -27,7 +27,7 @@ public class ShedulerConfig {
         log.info("Cron job is finished");
    }
 
-    @Scheduled(cron = "0 0/45 * ? * *")
+    @Scheduled(cron = "0 0/10 * ? * *")
     public void scheduleTopCompaniesMonitoring() {
         log.info("Top highest values stocks companies:");
         CompaniesStocks stocks = new CompaniesStocks();

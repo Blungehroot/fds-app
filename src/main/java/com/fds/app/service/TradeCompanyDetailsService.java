@@ -12,7 +12,8 @@ import java.util.Set;
 @Service
 public class TradeCompanyDetailsService {
 
-    private final TradeCompanyDetailsRepository tradeCompanyDetailsRepository;
+    @Autowired
+    private TradeCompanyDetailsRepository tradeCompanyDetailsRepository;
 
     @Autowired
     public TradeCompanyDetailsService(TradeCompanyDetailsRepository tradeCompanyDetailsRepository) {

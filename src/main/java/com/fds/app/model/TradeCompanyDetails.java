@@ -1,16 +1,17 @@
 package com.fds.app.model;
 
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
-@Document(collection = "trade_company")
+@Entity
 @Data
+@Table(name = "trade_companies")
 public class TradeCompanyDetails implements Serializable {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private int avgTotalVolume;
     private String calculationPrice;
     private double change;
