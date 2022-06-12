@@ -2,6 +2,7 @@ package com.fds.app.job;
 
 import com.fds.app.component.CompaniesStocks;
 import com.fds.app.iexapis.IexapisApiClient;
+import com.fds.app.service.TradeCompanyDetailsService;
 import com.fds.app.service.TradeCompanyDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +16,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 public class ShedulerConfig {
 
     @Autowired
-    private final TradeCompanyDetailsServiceImpl service;
+    private final TradeCompanyDetailsService service;
 
 
     @Scheduled(cron = "0 0/1 * ? * *")

@@ -2,6 +2,7 @@ package com.fds.app.service;
 
 import com.fds.app.model.TradeCompanyDetails;
 import com.fds.app.repository.TradeCompanyDetailsRepository;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
