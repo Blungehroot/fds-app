@@ -2,22 +2,21 @@ package com.fds.app.job;
 
 import com.fds.app.component.CompaniesStocks;
 import com.fds.app.iexapis.IexapisApiClient;
-import com.fds.app.service.TradeCompanyDetailsService;
+import com.fds.app.service.TradeCompanyDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-@Configuration
 @EnableScheduling
 @RequiredArgsConstructor
 @Slf4j
 public class ShedulerConfig {
 
     @Autowired
-    private final TradeCompanyDetailsService service;
+    private final TradeCompanyDetailsServiceImpl service;
+
 
     @Scheduled(cron = "0 0/1 * ? * *")
     public void scheduleDataGather() {

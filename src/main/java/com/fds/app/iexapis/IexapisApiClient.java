@@ -3,7 +3,9 @@ package com.fds.app.iexapis;
 import com.fds.app.config.FdsFactoryConfig;
 import com.fds.app.model.TradeCompany;
 import com.fds.app.model.TradeCompanyDetails;
+import com.fds.app.repository.TradeCompanyDetailsRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 import java.util.concurrent.*;
