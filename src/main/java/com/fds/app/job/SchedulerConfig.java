@@ -27,7 +27,7 @@ public class SchedulerConfig {
         log.info("Cron job is finished");
    }
 
-    @Scheduled(cron = "0 0/10 * ? * *")
+    @Scheduled(cron = "0 0/40 * ? * *")
     public void scheduleTopCompaniesMonitoring() {
         log.info("Top highest values stocks companies:");
         CompaniesStocks stocks = new CompaniesStocks();
