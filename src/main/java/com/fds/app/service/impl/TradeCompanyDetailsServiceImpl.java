@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -22,8 +23,16 @@ public class TradeCompanyDetailsServiceImpl implements TradeCompanyDetailsServic
 
     @Override
     public List<TradeCompanyDetails> saveAll(Set<TradeCompanyDetails> tradeCompanyDetails) {
-        List<TradeCompanyDetails> list = new ArrayList<>(tradeCompanyDetails);
-        return tradeCompanyDetailsRepository.saveAll(list);
+        List<TradeCompanyDetails> current = tradeCompanyDetailsRepository.findAll();
+
+        for (TradeCompanyDetails updatedCompany:tradeCompanyDetails) {
+            for (TradeCompanyDetails currentCompany:current) {
+                if (updatedCompany.getSymbol().equals(currentCompany.getSymbol()))
+                    tradeCompanyDetails.remove(updatedCompany);
+            }
+        }
+
+        return tradeCompanyDetailsRepository.saveAll(tradeCompanyDetails);
     }
 
     @Override
