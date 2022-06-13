@@ -6,12 +6,14 @@ import com.fds.app.service.TradeCompanyDetailsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 @EnableScheduling
 @RequiredArgsConstructor
 @Slf4j
+@Configuration
 public class SchedulerConfig {
 
     private final TradeCompanyDetailsService service;
