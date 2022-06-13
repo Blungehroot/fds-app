@@ -1,7 +1,8 @@
-package com.fds.app.service;
+package com.fds.app.service.impl;
 
 import com.fds.app.model.TradeCompanyDetails;
 import com.fds.app.repository.TradeCompanyDetailsRepository;
+import com.fds.app.service.TradeCompanyDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 

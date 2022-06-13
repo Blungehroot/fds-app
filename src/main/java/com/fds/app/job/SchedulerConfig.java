@@ -3,7 +3,6 @@ package com.fds.app.job;
 import com.fds.app.component.CompaniesStocks;
 import com.fds.app.iexapis.IexapisApiClient;
 import com.fds.app.service.TradeCompanyDetailsService;
-import com.fds.app.service.TradeCompanyDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +12,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 @EnableScheduling
 @RequiredArgsConstructor
 @Slf4j
-public class ShedulerConfig {
+public class SchedulerConfig {
 
-    @Autowired
     private final TradeCompanyDetailsService service;
 
 
