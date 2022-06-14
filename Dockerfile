@@ -2,7 +2,8 @@
 ARG BUILD_HOME=/fds-app
 
 # Gradle image for the build stage.
-FROM arm64v8/gradle:7.4.2-jdk-focal AS build-image
+FROM gradle:jdk17-alpine AS build-image
+#FROM arm64v8/gradle:7.4.2-jdk-focal AS build-image
 
 # Set the working directory.
 ARG BUILD_HOME
@@ -18,7 +19,8 @@ COPY --chown=gradle:gradle src $APP_HOME/src
 RUN gradle --no-daemon build
 
 # Java image for the application to run in.
-FROM arm64v8/openjdk:17
+FROM openjdk:17-alpine
+#FROM arm64v8/openjdk:17
 
 # Copy the jar file in and name it app.jar.
 ARG BUILD_HOME
