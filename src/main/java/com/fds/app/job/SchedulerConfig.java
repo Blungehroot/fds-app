@@ -19,7 +19,7 @@ public class SchedulerConfig {
     private final TradeCompanyDetailsService service;
 
 
-    @Scheduled(cron = "0 0/1 * ? * *")
+    @Scheduled(cron = "0 0/30 * ? * *")
     public void scheduleDataGather() {
         log.info("Cron job is started");
         IexapisApiClient receiver = new IexapisApiClient();
