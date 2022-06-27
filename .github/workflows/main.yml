@@ -27,7 +27,7 @@ jobs:
 
     - name: Build, tag, and push image to Amazon ECR
       env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REGISTRY: ${{ steps.LOGIN_ECR_OUTPUTS_REGISTRY }}
         ECR_REPOSITORY: fds-app
         IMAGE_TAG: latest
       run: |
