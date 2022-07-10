@@ -18,7 +18,6 @@ public class SchedulerConfig {
 
     private final TradeCompanyDetailsService service;
 
-
     @Scheduled(cron = "0 * */12 ? * *")
     public void scheduleDataGather() {
         log.info("Cron job is started");
