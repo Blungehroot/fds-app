@@ -18,7 +18,7 @@ public class SchedulerConfig {
 
     private final TradeCompanyDetailsService service;
 
-    @Scheduled(cron = "0 * */12 ? * *")
+    @Scheduled(cron = "0 * */22 ? * *")
     public void scheduleDataGather() {
         log.info("Cron job is started");
         IexapisApiClient receiver = new IexapisApiClient();
@@ -26,7 +26,7 @@ public class SchedulerConfig {
         log.info("Cron job is finished");
    }
 
-    @Scheduled(cron = "0 0/10 */12 ? * *")
+    @Scheduled(cron = "0 * */24 ? * *")
     public void scheduleTopCompaniesMonitoring() {
         log.info("Top highest values stocks companies:");
         CompaniesStocks stocks = new CompaniesStocks();
